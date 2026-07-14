@@ -12,7 +12,7 @@ using `bulk_create()`.
 ## Setup
 
 1. Clone the repo and create a virtual environment:
-   git clone <your-repo-url>
+   git clone <https://github.com/Opudo-Shaz/bulktransaction-api>
    cd bulktransaction-api
    python3 -m venv venv
    source venv/bin/activate   (Windows: venv\Scripts\activate)
