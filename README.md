@@ -1,0 +1,58 @@
+# Bulk Transaction API
+
+A Django REST Framework API that accepts a list of accounts, each with a
+nested list of transactions, and inserts everything in a single request
+using `bulk_create()`.
+
+## Tech stack
+- Python 3.12
+- Django 6.0
+- Django REST Framework
+
+## Setup
+
+1. Clone the repo and create a virtual environment:
+   git clone <your-repo-url>
+   cd bulktransaction-api
+   python3 -m venv venv
+   source venv/bin/activate   (Windows: venv\Scripts\activate)
+
+2. Install dependencies:
+   pip install -r requirements.txt
+
+3. Run migrations:
+   python manage.py migrate
+
+4. Start the dev server:
+   python manage.py runserver
+
+The API is available at http://127.0.0.1:8000/api/transactions/bulk/
+
+## API
+
+POST /api/transactions/bulk/
+
+Request body:
+{
+  "accounts": [
+    {
+      "name": "John Mwangi",
+      "account_number": "KE001234",
+      "transactions": [
+        {"reference": "TXN-001", "amount": "1500.00", "transaction_type": "credit", "description": "Salary payment"}
+      ]
+    }
+  ]
+}
+
+Success response (201):
+{"success": true, "accounts_created": 1, "transactions_created": 1}
+
+Validation error response (400):
+{"success": false, "errors": {...}}
+
+## Design notes
+- Entire payload validated by nested DRF serializers before any DB writes.
+- Duplicate account_number values (in-payload or already existing) rejected before writes.
+- Accounts and Transactions each inserted with a single bulk_create() call — no per-record loop.
+- Writes wrapped in transaction.atomic() so a failure mid-way rolls back everything.
