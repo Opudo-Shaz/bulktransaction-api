@@ -11,23 +11,75 @@ using `bulk_create()`.
 
 ## Setup
 
-1. Clone the repo and create a virtual environment:
-   git clone <https://github.com/Opudo-Shaz/bulktransaction-api>
+1. Clone the repository:
+```bash
+   git clone https://github.com/Opudo-Shaz/bulktransaction-api.git
    cd bulktransaction-api
+```
+
+2. Create a virtual environment:
+
+   **Linux / macOS:**
+```bash
    python3 -m venv venv
-   source venv/bin/activate   (Windows: venv\Scripts\activate)
+   source venv/bin/activate
+```
 
-2. Install dependencies:
+   **Windows (Command Prompt):**
+```cmd
+   python -m venv venv
+   venv\Scripts\activate
+```
+
+   **Windows (PowerShell):**
+```powershell
+   python -m venv venv
+   venv\Scripts\Activate.ps1
+```
+
+   You'll know it worked when your terminal prompt shows `(venv)` at the start.
+
+   > **Note:** On some Linux distributions (Debian/Ubuntu 23.04+), `python3 -m venv`
+   > may fail or `pip install` may refuse to run outside a virtual environment
+   > with an "externally-managed-environment" error. If `python3 -m venv` itself
+   > fails, install the venv module first:
+   > ```bash
+   > sudo apt install python3-full python3-venv
+   > ```
+   > Then retry creating the virtual environment above. Always activate the
+   > virtual environment (you should see `(venv)` in your prompt) before running
+   > `pip install`.
+
+3. Install dependencies (with the virtual environment active):
+```bash
    pip install -r requirements.txt
+```
 
-3. Run migrations:
+4. Run migrations:
+```bash
    python manage.py migrate
+```
 
-4. Start the dev server:
+5. Start the dev server:
+```bash
    python manage.py runserver
+```
 
-The API is available at http://127.0.0.1:8000/api/transactions/bulk/
+   The API is available at `http://127.0.0.1:8000/api/transactions/bulk/`.
 
+## Running tests
+
+With the virtual environment active:
+```bash
+python manage.py test transactions
+```
+
+This runs the automated test suite covering:
+- Successful bulk creation of accounts and transactions
+- Validation rejection of invalid transaction data
+- Rejection of duplicate account numbers
+- Graceful handling of unexpected database errors (mocked failure, returns a
+  generic 500 response without leaking internal error details)
 ## API
 
 POST /api/transactions/bulk/
